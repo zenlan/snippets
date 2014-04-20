@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>URL Hash Handling</title>
+    <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <style>
+      table {border: 1px solid #000;text-align:center;}
+      ul {list-style-type: none;}
+    </style>
+  </head>
+  <body>
+    <h1>URL Hash Handling</h1>
+    <p><label for="encoded">encoded</label><br /><textarea rows="2" cols="128" id="encoded"></textarea></p>
+    <p><p><label for="encoded">decoded</label><br /><textarea rows="2" cols="128" id="decoded"></textarea></p>
+    <table>
+      <tr>
+        <td>
+          <ul>
+            <li><button name="button">empty string</button></li>
+            <li><button name="button">unquoted string</button></li>
+            <li><button name="button">"quoted string"</button></li>
+            <li><button name="button">#</button></li>
+            <li><button name="button">#hashtag</button></li>
+            <li><button name="button"><</button></li>
+            <li><button name="button">></button></li>
+            <li><button name="button">&lt;tag&gt;</button></li>
+          </ul>
+        </td>
+        <td>
+          <ul>
+            <li><button name="button">$</button></li>
+            <li><button name="button">\</button></li>
+            <li><button name="button">%</button></li>
+            <li><button name="button">100%</button></li>
+            <li><button name="button">?</button></li>
+            <li><button name="button">?query</button></li>
+            <li><button name="button">&</button></li>
+            <li><button name="button">&text</button></li>
+            <li><button name="button">"quote & quote"</button></li>
+          </ul>
+        </td>
+        <td>
+          <ul>
+            <li><button name="button">漢字</button></li>
+            <li><button name="button">руссиан цчарс</button></li>
+            <li><button name="button">āēīōū</button></li>
+            <li><button name="button">♥♦♠♣</button></li>
+            <li><button name="button">←↑→↓</button></li>
+            <li><button name="button">♀♂☺☆</button></li>
+            <li><button name="button">±×÷·</button></li>
+            <li><button name="button">©™®°</button></li>
+            <li><button name="button">€¢£¥</button></li>
+          </ul>
+        </td>
+      </tr>
+    </table>
+    <script type="text/javascript" src="https://caja.appspot.com/html-css-sanitizer-minified.js"></script>
+    <script type="text/javascript" src="url-hash.js"></script>
+  </body>
+</html>
