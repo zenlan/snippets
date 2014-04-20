@@ -45,27 +45,3 @@ var sanitizeText = function(string) {
   }
   return result;
 };
-var showURL = function() {
-  var string = decodeURIComponent(document.location.hash.substr(1));
-  var safehash = sanitizeText(string);
-  var url = document.location.protocol + '//' + document.location.hostname + document.location.pathname;
-  document.getElementById('encoded').value = url + '#' + encodeURIComponent(safehash);
-  document.getElementById('decoded').value = url + '#' + safehash;
-  return false;
-};
-document.addEventListener("DOMContentLoaded", function(event) {
-  document.body.onmouseup = function(event) {
-    var target = event.target || event.toElement;
-    if (target.nodeName.toLowerCase() === "button") {
-      var string = (target.textContent === 'empty string' ? '' : target.textContent);
-      handleHash(string);
-    }
-  };
-  if (!'onhashchange' in window) {
-    alert('This browser does not support the hashchange event!');
-  }
-  window.onhashchange = function() {
-    showURL();
-  };
-  showURL();
-});
