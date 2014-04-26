@@ -1,0 +1,1 @@
+alert('1.0/common/js/script.js (loaded by 1.0/common/include1.html)');

@@ -1,0 +1,4 @@
+body{background-color:pink;font-family:sans-serif;}
+p.css{color:blue;font-style:italic;font-weight:bold;}
+p.css::before { content: '1.0/common/css/style.css'  }
+p.css::after { content: '(loaded by 1.0/index.html)'  }
