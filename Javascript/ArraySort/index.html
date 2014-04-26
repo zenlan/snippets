@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Locale Sorting</title>
+  </head>
+  <body>
+    <h1>Locale Sorting</h1>
+    <div style="float:left;">
+      <h3>Unsorted</h3>
+      <ol id="orig"></ol>
+    </div>
+    <div style="float:left;">
+      <h3>Sorted</h3>
+      <ol id="sort"></ol>
+    </div>
+    <script>
+      document.addEventListener("DOMContentLoaded", function(event) {
+
+        var ol1 = document.getElementById('orig'), ol2 = document.getElementById('sort');
+        var sort, orig = [
+          'bœuf', 'beef',
+          'café', 'CAFÉ', 'cafe', 'Café', 'Cafe', 'Café au lait', 'Café-au-lait',
+          'cañon', 'canon',
+          'dû', 'du',
+          'L\'Haÿ-les-Roses', 'L\'Haÿ les Roses', 'L Hay les Roses'
+        ];
+        orig.forEach(function(element, index, array) {
+          ol1.innerHTML += '<li>' + element + '</li>';
+        });
+
+        sort = orig;
+        sort.sort(function(a, b) {
+          return a.toLowerCase().localeCompare(b.toLowerCase());
+        });
+
+        sort.forEach(function(element, index, array) {
+          ol2.innerHTML += '<li>' + element + '</li>';
+        });
+
+      });
+    </script>
+  </body>
+</html>
