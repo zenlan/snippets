@@ -1,0 +1,41 @@
+body {
+  color: #fff;
+  background-color: #000;
+}
+.container {
+  min-width: 100%;
+}
+.deck {
+  border: solid 1px #000;
+  background-color: pink;   
+}
+/* NAV */
+.navbar {
+  height: 50px;
+}
+.home .navbar-header {
+  min-width: 100%;
+}
+.navbar, .breadcrumb {
+  background-color: #222;
+  color: #fff;   
+}
+.home .breadcrumb > li + li:before {
+  content: "";
+}
+.breadcrumb li a {
+  color: #fff;
+  font-size: 26px;
+}
+.navbar-inverse .navbar-brand {
+  color: #ddd;
+  font-size: 20px;
+}
+
+/* FIX FOR NAVBAR-FIXED-TOP RESPONSIVE OVERLAP BUG */
+body {
+  padding-top: 60px;
+  padding-bottom: 70px;
+}
+/* END FIX FOR NAVBAR-FIXED-TOP RESPONSIVE OVERLAP BUG */
+
