@@ -13,6 +13,6 @@ App.DeckCollection = Backbone.Collection.extend({
     });
   },
   numModels: function() {
-    return this.models.length - 1;
+    return this.models.length;
   }
 });
