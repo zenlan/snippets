@@ -1,0 +1,45 @@
+body {
+  font-family: Verdana, Arial, sans-serif;
+  font-size: 13px;
+}
+div {
+  margin-bottom: 1%;
+}
+table {
+  width:50%;
+  border: 1px solid #333;
+}
+button {
+  background-color:#ffffdd;
+}
+caption, th {
+  background-color:#ffffdd;
+  font-weight: normal;
+  text-align: left;
+}
+input {
+  width: 99%;
+}
+form td {
+  background-color:#eeeeee;
+  border: 1px solid #333;
+  padding: 3px;  
+}
+form td.label {
+  width:2%;
+  text-align: right;
+}
+
+.data table {
+  width:70%;
+}
+.data td {
+  background-color:#eeeeee;
+  border: 1px solid #eee;
+  padding: 3px;  
+}
+
+div#results {
+  width:100%;
+  background-color: #ffffdd;
+}

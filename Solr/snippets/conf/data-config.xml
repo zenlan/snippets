@@ -1,0 +1,15 @@
+<dataConfig>
+  <propertyWriter dateFormat="yyyy-MM-dd HH:mm:ss.SSS" type="SimplePropertiesWriter"/>
+  <dataSource type="JdbcDataSource" driver="com.mysql.jdbc.Driver" url="jdbc:mysql://localhost/test?characterEncoding=UTF-8&amp;zeroDateTimeBehavior=convertToNull" user="root" password=""/>
+  <document>
+    <entity name="test_solr_a" pk="id" transformer="TemplateTransformer"
+            query="SELECT *, '${dataimporter.request.command}' as request, '${dataimporter.request.foo}' as foo FROM test_solr_a"
+            deltaImportQuery="SELECT *, '${dataimporter.request.command}' as request, '${dataimporter.request.foo}' as foo FROM test_solr_a WHERE id='${dataimporter.delta.id}'"
+            deltaQuery="SELECT a.id FROM test_solr_a a WHERE a.updated >= '${dataimporter.last_index_time}' OR  a.id = '${dataimporter.request.foo}'">    
+      <entity name="relations" pk="id" 
+              query="SELECT COUNT(*) as relations from test_solr_b where a_id='${test_solr_a.id}'">
+        <field column="relations" name="relations"/>
+      </entity>                  
+    </entity>	    
+  </document>
+</dataConfig>
