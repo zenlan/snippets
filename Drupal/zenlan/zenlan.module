@@ -1,0 +1,489 @@
+<?php
+
+/**
+ * @file 
+ *
+ * @ingroup zenlan
+ */
+
+/**
+ * Implements hook_views_api().
+ */
+function zenlan_views_api() {
+  return array(
+      'api' => '3.0',
+      'path' => drupal_get_path('module', 'zenlan'),
+  );
+}
+
+function zenlan_permission() {
+  return array(
+      'administer zenlan config' => array(
+          'title' => t('Administer Zenlan Configuration'),
+          'description' => t('Perform system administration tasks for the Zenlan module.'),
+      ),
+      'administer zenlan data' => array(
+          'title' => t('Administer Zenlan Data'),
+          'description' => t('Perform data administration tasks for the Zenlan module.'),
+      ),
+  );
+}
+
+define('ZENLAN_ADMIN_MENU_ROOT', 'admin/zenlan');
+
+/**
+ * Implements hook_menu().
+ */
+function zenlan_menu() {
+  $items[ZENLAN_ADMIN_MENU_ROOT] = array(
+      'title' => t('Zenlan'),
+      'page callback' => 'zenlan_index',
+      'access arguments' => array('administer zenlan data'),
+      'file' => 'zenlan.module',
+      'type' => MENU_NORMAL_ITEM,
+      'weight' => 200,
+  );
+  $items[ZENLAN_ADMIN_MENU_ROOT . '/info'] = array(
+      'title' => t('Info'),
+      'page callback' => 'drupal_get_form',
+      'page arguments' => array('zenlan_info'),
+      'access arguments' => array('administer zenlan data'),
+      'file' => 'zenlan.admin.inc',
+      'type' => MENU_NORMAL_ITEM,
+      'weight' => 10,
+  );
+  $items[ZENLAN_ADMIN_MENU_ROOT . '/form1'] = array(
+      'title' => t('Edit Form1'),
+      'page callback' => 'drupal_get_form',
+      'page arguments' => array('zenlan_form1'),
+      'access arguments' => array('administer zenlan data'),
+      'file' => 'zenlan.admin.inc',
+      'type' => MENU_NORMAL_ITEM,
+      'weight' => 20,
+  );
+  $items[ZENLAN_ADMIN_MENU_ROOT . '/entity1'] = array(
+      'title' => t('Entity1'),
+      'description' => '',
+      'page callback' => 'drupal_get_form',
+      'page arguments' => array('zenlan_entity1'),
+      'access arguments' => array('administer zenlan data'),
+      'file' => 'zenlan.admin.inc',
+      'type' => MENU_NORMAL_ITEM,
+      'weight' => 30,
+  );
+  $items[ZENLAN_ADMIN_MENU_ROOT . '/autocomplete1'] = array(
+      'title' => t('Autocomplete1'),
+      'description' => '',
+      'page callback' => 'drupal_get_form',
+      'page arguments' => array('zenlan_autocomplete1'),
+      'access arguments' => array('administer zenlan data'),
+      'file' => 'zenlan.admin.inc',
+      'type' => MENU_NORMAL_ITEM,
+      'weight' => 40,
+  );
+  $items['zenlan/ac1'] = array(
+      'page callback' => 'zenlan_ac1',
+      'page arguments' => array(2),
+      'access arguments' => array('administer zenlan data'),
+      'file' => 'zenlan.autocomplete.inc',
+      'type' => MENU_CALLBACK,
+  );
+  $items[ZENLAN_ADMIN_MENU_ROOT . '/ajax'] = array(
+      'title' => t('Ajax1'),
+      'description' => '',
+      'page callback' => 'drupal_get_form',
+      'page arguments' => array('zenlan_ajax1'),
+      'access arguments' => array('administer zenlan data'),
+      'file' => 'zenlan.ajax.inc',
+      'type' => MENU_NORMAL_ITEM,
+      'weight' => 50,
+  );
+  $items[ZENLAN_ADMIN_MENU_ROOT . '/page'] = array(
+      'title' => t('Page1'),
+      'description' => '',
+      'page callback' => 'zenlan_page_test',
+      'access arguments' => array('administer zenlan data'),
+      'file' => 'zenlan.module',
+      'type' => MENU_NORMAL_ITEM,
+      'weight' => 60,
+  );
+  
+  return $items;
+}
+
+/**
+ * Implements hook_theme(). 
+ */
+function zenlan_theme($existing, $type, $theme, $path) {
+  $dir = drupal_get_path('module', 'zenlan');
+  return array(
+      'zenlan_index' => array(
+          'variables' => array('zenlan_index_vars' => array()),
+          'render element' => 'page',
+          'path' => $dir . '/theme',
+          'file' => 'zenlan.theme.inc',
+          'template' => 'zenlan-index',
+      ),
+      'zenlan_page_test' => array(
+          'variables' => array('zenlan_page_test_vars' => array()),
+          'render element' => 'page',
+          'path' => $dir . '/theme',
+          'file' => 'zenlan.theme.inc',
+          'template' => 'zenlan-page-test',
+      ),
+      'zenlan_form_test' => array(
+          'render element' => 'form',
+          'path' => $dir . '/theme',
+          'file' => 'zenlan.theme.inc',
+      ),
+  );
+}
+
+function zenlan_index() {  
+  $result['zenlan_index'] = array(
+      '#theme' => 'zenlan_index',
+  );
+  return $result;
+}
+
+function zenlan_page_test() {
+  $result['zenlan_page_test'] = array(
+      '#theme' => 'zenlan_page_test',
+  );
+  return $result;
+}
+
+/**
+ * Implementation of hook_cron_queue_info() 
+ */
+function zenlan_cron_queue_info() {
+  $queues['zenlan'] = array('worker callback' => 'zenlan_task', 'time' => 10,);
+  return $queues;
+}
+
+function zenlan_task($item) {
+  watchdog('zenlan_task', $item);
+}
+
+/**
+ * Implementation of hook_cron() 
+ */
+function zenlan_cron() {
+  $items = array('time: ' . date('D m YYYY h:i:s'));
+  $queue = DrupalQueue::get('zenlan');
+  foreach ($items as $item) {
+    $queue->createItem($item);
+  }
+}
+
+/**
+ * Implements hook_entity_info().
+ */
+function zenlan_entity_info() {
+
+  $info['zentity1'] = array(
+      'label' => t('Zentity1'),
+      'plural label' => t('Zentity1s'),
+      'controller class' => 'Zentity1Controller',
+      'metadata controller class' => FALSE,
+      'entity class' => 'Zentity1',
+      'uri callback' => 'zenlan_zentity1_url',
+      'module' => 'zenlan',
+      'view callback' => 'zenlan_zentity1_view',
+      'load hook' => 'zenlan_zentity1_load',
+      'access callback' => 'zenlan_zentity1_access',
+      'creation callback' => 'zenlan_zentity1_create',
+      'exportable' => FALSE,
+      'fieldable' => FALSE,
+      'static cache' => TRUE,
+      'field cache' => FALSE,
+      'entity keys' => array(
+          'id' => 'id',
+      ),
+      'bundles' => array(
+          'zentity1_a' => array(
+              'label' => 'zentity1 Bundle A',
+          ),
+          'zentity1_b' => array(
+              'label' => 'zentity1 Bundle B',
+          ),
+      ),
+      'view modes' => array(
+          'full' => array(
+              'label' => t('Full'),
+              'custom settings' => FALSE,
+          ),
+          'teaser' => array(
+              'label' => t('Teaser'),
+              'custom settings' => TRUE,
+          ),
+          'debug' => array(
+              'label' => t('Debug'),
+              'custom settings' => FALSE,
+          ),
+      ),
+  );
+
+  $info['zentity1_a'] = array(
+      'label' => t('Zentity1 A'),
+      'plural label' => t('Zentity1 As'),
+      'controller class' => 'Zentity1Controller',
+      'entity class' => 'Zentity1',
+      'creation callback' => 'zenlan_zentity1_create',
+      'module' => 'zenlan',
+      'entity keys' => array(
+          'id' => 'id',
+      ),
+      'view modes' => array(
+          'full' => array(
+              'label' => t('Full'),
+              'custom settings' => FALSE,
+          ),
+          'teaser' => array(
+              'label' => t('Teaser'),
+              'custom settings' => TRUE,
+          ),
+          'debug' => array(
+              'label' => t('Debug'),
+              'custom settings' => FALSE,
+          ),
+      ),
+  );
+  $info['zentity1_b'] = array(
+      'label' => t('Zentity1 B'),
+      'plural label' => t('Zentity1 Bs'),
+      'controller class' => 'Zentity1Controller',
+      'entity class' => 'Zentity1',
+      'creation callback' => 'zenlan_zentity1_create',
+      'module' => 'zenlan',
+      'entity keys' => array(
+          'id' => 'id',
+      ),
+  );
+  return $info;
+}
+
+/**
+ * Implements hook_entity_property_info().
+ */
+function zenlan_entity_property_info() {
+
+  $info = array(
+      'zentity1_a' => array(
+          'properties' => array(),
+      ),
+      'zentity1_b' => array(
+          'properties' => array(),
+      ),
+  );
+
+  $properties = &$info['zentity1_a']['properties'];
+  $properties['id'] = array('type' => 'integer', 'label' => 'ID', 'description' => 'Unique ID');
+  $properties['title'] = array('type' => 'text', 'label' => 'Title', 'description' => 'Title');
+  $properties['title_a'] = array('type' => 'text', 'label' => 'Title A', 'description' => 'Title A');
+
+  $properties = &$info['zentity1_b']['properties'];
+  $properties['id'] = array('type' => 'integer', 'label' => 'ID', 'description' => 'Unique ID');
+  $properties['title'] = array('type' => 'text', 'label' => 'Title', 'description' => 'Title');
+  $properties['title_b'] = array('type' => 'text', 'label' => 'Title B', 'description' => 'Title B');
+
+  return $info;
+}
+
+/**
+ * Access callback
+ *
+ * @param string $op
+ *   Operation type
+ * @param string $type
+ *   Type
+ * @param string $account
+ *   Account
+ */
+function zenlan_zentity1_access($op, $type = NULL, $account = NULL) {
+  return TRUE;
+}
+
+/**
+ * Load a single entity
+ *
+ * @param integer $id
+ * @return entity
+ */
+function zenlan_zentity1_load($id = NULL) {
+  return entity_get_controller('zentity1')->load(array('id' => $id));
+}
+
+/**
+ * Load multiple entities
+ *
+ * @param array $values
+ * @return entity
+ */
+function zenlan_zentity1_load_multiple($values = array()) {
+  return entity_get_controller('zentity1')->load($values);
+}
+
+/**
+ * Return the default url for this entity
+ *
+ * @param object $entity
+ *   Entity object
+ */
+function zenlan_zentity1_url($entity) {
+  return array('path' => 'zentity1/edit/' . $entity->id);
+}
+
+function zenlan_zentity1_create($values, $entity_type) {
+  return new Zentity1($values, $entity_type);
+}
+
+/**
+ * The class used for Zentity1 entities.
+ */
+class Zentity1 extends Entity {
+
+  /**
+   * @var string $id
+   *   Unique identifier
+   */
+  public $id;
+
+  /**
+   * Constructor
+   *
+   * @param array $values
+   *   Array of values to be assigned as object properties
+   */
+  public function __construct(array $values = array(), $entityType = NULL) {
+    if (!array_key_exists('id', $values)) {
+      $values['id'] = 0;
+    }
+    parent::__construct($values, $entityType);
+  }
+
+  /**
+   * Initialise/build entity content
+   */
+  public function buildContent($view_mode = 'full', $langcode = NULL) {
+    
+  }
+
+  /**
+   * Save entity
+   */
+  public function save() {
+    
+  }
+
+}
+
+/**
+ * Controller class for test entities
+ */
+class Zentity1Controller extends DrupalDefaultEntityController {
+
+  public function load($values = array(), $conditions = array()) {
+    $entities = array();
+    try {
+      foreach ($values as $args) {
+        if (is_numeric($args)) {
+          $data = $this->loadZentity1ById($args);
+        } else if (is_array($args)) {
+          $data = $args;
+        } else {
+          $data = array('error' => 'Invalid entity args ' . print_r($args, 1));
+          watchdog('Zentity1Controller::load', $data);
+        }
+        $entities[] = entity_create($this->entityType, $data);
+      }
+    } catch (Exception $e) {
+      watchdog('Zentity1Controller::load', '(' . $data . ')' . $e->getMessage());
+    }
+    return $entities;
+  }
+
+  /**
+   * @param integer $id
+   * @return array
+   */
+  protected function loadZentity1ById($id) {
+    try {
+      $result = array(
+          'id' => $id,
+          'title' => 'Test ' . $id . strtoupper(substr($this->entityType, 9, 1)),
+      );
+    } catch (Exception $e) {
+      watchdog('Zentity1Controller::fetchZentity1ById', '(' . $id . ')' . $e->getMessage());
+    }
+    return $result;
+  }
+
+  public function delete() {
+    return TRUE;
+  }
+
+}
+
+function zenlan_zentity1_view($entities, $view_mode) {
+  try {
+    if (is_array($entities)) {
+      $entity = array_pop($entities);
+    }
+    if (!is_a($entity, 'Zentity1')) {
+      $errors[] = 'View mode object is not type Zentity1';
+    }
+  } catch (Exception $e) {
+    $errors[] = $e->getMessage();
+  }
+  if (!empty($errors)) {
+    drupal_set_message(implode('<br />', $errors), 'warning');
+  }
+  switch ($view_mode) {
+    case 'full':
+      $result = zenlan_zentity1_view_mode_full($entity);
+      break;
+    case 'teaser':
+      $result = zenlan_zentity1_view_mode_teaser($entity);
+      break;
+    case 'debug':
+      $result = zenlan_zentity1_view_mode_debug($entity);
+      break;
+    default:
+      $result = array();
+  }
+  return $result;
+}
+
+function zenlan_zentity1_view_mode_debug($entity) {
+  $entity->content['stuff'] = array(
+      '#type' => 'markup',
+      '#title' => t(''),
+      '#markup' => '<p>Debug mode</p>',
+  );
+  return $entity->content;
+}
+
+function zenlan_zentity1_view_mode_teaser($entity) {
+  $entity->content['stuff'] = array(
+      '#type' => 'markup',
+      '#title' => t(''),
+      '#markup' => '<p>Tease mode</p>',
+  );
+  return $entity->content;
+}
+
+function zenlan_zentity1_view_mode_full(&$entity) {
+  $entity->content['stuff'] = array(
+      '#type' => 'markup',
+      '#title' => t(''),
+      '#markup' => '<p>Full mode</p>',
+  );
+  return $entity->content;
+}
+
+function zenlan_admin() {
+//  INSERT INTO `users` (`uid`, `name`, `pass`, `mail`, `theme`, `signature`, `signature_format`, `created`, `access`, `login`, `status`, `timezone`, `language`, `picture`, `init`, `data`) VALUES
+//(3, 'admin', '$S$DKZ5ftPqbQRWWrgyZPJd2yN8BO9BtFMgoMifsGYlzFdTXGNNDPFn', 'admin@zenlan.com', '', '', NULL, 1406732559, 1406811281, 1406732708, 1, 'Europe/London', '', 0, 'admin@zenlan.com', 0x623a303b);
+//  INSERT INTO `aam_drupal`.`users_roles` (`uid`, `rid`) VALUES ('3', '3');
+}

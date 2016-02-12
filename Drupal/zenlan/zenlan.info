@@ -1,0 +1,11 @@
+name = Zenlan
+description = Code snippets and examples
+core = 7.x
+package = Other
+
+files[] = views/zenlan_argument.inc
+files[] = views/zenlan_filter.inc
+files[] = views/zenlan_field.inc
+files[] = views/zenlan_query.inc
+
+configure = admin/config/development/zenlan
