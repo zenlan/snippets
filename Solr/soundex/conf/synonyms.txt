@@ -1,0 +1,91 @@
+# The ASF licenses this file to You under the Apache License, Version 2.0
+# (the "License"); you may not use this file except in compliance with
+# the License.  You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+#-----------------------------------------------------------------------
+#some test synonym mappings unlikely to appear in real input text
+aaafoo => aaabar
+bbbfoo => bbbfoo bbbbar
+cccfoo => cccbar cccbaz
+fooaaa,baraaa,bazaaa
+
+# Some synonym groups specific to this example
+#GB,gib,gigabyte,gigabytes
+#MB,mib,megabyte,megabytes
+#notice we use "gib" instead of "GiB" so any WordDelimiterFilter coming
+#after us won't split it into two words.
+
+# Synonym mappings can be used for spelling correction too
+#pixima => pixma
+#a\,a => b\,b
+
+
+1st, first
+2nd, second
+3rd, third
+4th, fourth
+
+ww1, wwI, world war one, first world war, world war i
+ww2, wwII, world war two, second world war, world war ii
+pvt, pte, private
+sgt, sergeant, sergt
+cpl, corporal
+cpt, cpn, capt, captain
+adj, adjutant
+quarter master, quartermaster, qm
+cmdr, commander
+lt, lieut, lieutenant
+col, colonel
+maj, major
+gen, general
+asst, assistant
+bdr, bombadier 
+rev, reverend
+gnr, gunner
+rn, royal navy, navy
+rfc, raf, royal air force, airforce, air force
+fl, flight
+jr, junior
+act, acting
+lead, leading, leader
+obs, observer
+adm, admiral
+airman, aircraftman
+airwoman, aircraftwoman
+
+reg, reg. regt, regiment
+btn, battalion
+co, co., company
+art, art., artillery
+sq, sqd, sqdr, squad, squadron
+h.m., hm, hms, h.m.s
+ss, s.s.
+
+vc, victoria cross
+gc, george cross
+gm, george medal
+om, order of merit
+mc, military cross
+mm, military medal
+mbe, obe, order of the british emptire
+kc, knight commander
+cgc, conspicuous gallantry cross
+cgm, conspicuous gallantry medal
+bem, british empire medal
+
+sth, south
+nth, north
+
+color, colour
+program, programme
+year, years, year's
+voluntar, voluntary
+st, st. saint

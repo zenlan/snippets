@@ -1,0 +1,7 @@
+<dataConfig>
+  <propertyWriter dateFormat="yyyy-MM-dd HH:mm:ss.SSS" type="SimplePropertiesWriter"/>
+  <dataSource type="JdbcDataSource" driver="com.mysql.jdbc.Driver" url="jdbc:mysql://localhost/test_soundex?characterEncoding=UTF-8&amp;zeroDateTimeBehavior=convertToNull" user="root" password=""/>
+  <document>
+    <entity name="test_soundex" pk="id" transformer="TemplateTransformer" query="SELECT id, surname as surname_string FROM test_soundex"></entity>	
+  </document>
+</dataConfig>
