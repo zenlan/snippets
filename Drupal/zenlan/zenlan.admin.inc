@@ -292,7 +292,7 @@ function zenlan_entity1be_test_submit($form, $form_state) {
 
 function zenlan_autocomplete1($form, array &$form_state) {
   $form['#tree'] = TRUE;
-  $form['#description'] = t('Autocomplete');
+  $form['#description'] = t('Autocomplete (custom)');
 
   $form['id'] = array(
       '#title' => 'ID',
@@ -306,17 +306,32 @@ function zenlan_autocomplete1($form, array &$form_state) {
       '#title' => 'Name',
       '#type' => 'textfield',
       '#default_value' => '',
-//      '#autocomplete_path' => 'zenlan/ac1',
       '#attributes' => array(
           'id' => 'edit-name',
       )
   );
   drupal_add_css('//code.jquery.com/ui/1.8.24/themes/base/jquery-ui.css', 'external');
-//  drupal_add_js('//code.jquery.com/jquery-1.8.2.js');
   drupal_add_js('//code.jquery.com/ui/1.8.24/jquery-ui.js', 'external');
-  $path = drupal_get_path('module', 'zenlan');  
+  $path = drupal_get_path('module', 'zenlan');
   drupal_add_js($path . '/js/jquery.base64.js');
   drupal_add_js($path . '/js/zenlan-autocomplete.js');
-  drupal_add_js(array('zenlan' => array('api_url' => 'zenlan/ac1')), 'setting');
+  drupal_add_js(array('zenlan' => array('api_url' => base_path() . 'zenlan/ac1/')), 'setting');
+  return $form;
+}
+
+function zenlan_autocomplete2($form, array &$form_state) {
+  $form['#tree'] = TRUE;
+  $form['#description'] = t('Autocomplete (native)');
+
+  $form['name'] = array(
+      '#title' => 'Name',
+      '#type' => 'textfield',
+      '#default_value' => '',
+      '#autocomplete_path' => 'zenlan/ac2',
+//      '#autocomplete_path' => 'user/autocomplete',
+//      '#attributes' => array(
+//          'id' => 'edit-name',
+//      )
+  );
   return $form;
 }

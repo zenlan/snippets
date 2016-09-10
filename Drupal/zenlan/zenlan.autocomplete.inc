@@ -21,3 +21,25 @@ function zenlan_ac1($arg) {
   }
   drupal_json_output($results);
 }
+
+function zenlan_ac2($arg) {
+  $array = array(
+      'one',
+      'two',
+      'three',
+      'four',
+      'five',
+      'six',
+      'seven',
+      'eight',
+      'nine',
+  );
+  $array = array_combine(array_values($array), array_values($array));
+  $string = $arg;
+  foreach ($array as $id => $name) {
+    if (strpos($name, $string) !== FALSE) {
+      $results[$id] = $name;
+    }
+  }
+  drupal_json_output($results);
+}

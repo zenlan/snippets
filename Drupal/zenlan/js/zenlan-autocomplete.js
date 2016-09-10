@@ -1,7 +1,8 @@
 (function($) {
   $(document).ready(function() {
+    
     $('#edit-id').hide();   
-    var api_url = 'http://localhost/wma-cms/zenlan/ac1/';
+    var api_url = Drupal.settings.zenlan.api_url;
     var selected = '';
     $("#edit-name").autocomplete({      
       source: function(request, response) {

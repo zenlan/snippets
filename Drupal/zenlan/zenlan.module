@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @file 
+ * @file
  *
  * @ingroup zenlan
  */
@@ -81,14 +81,30 @@ function zenlan_menu() {
       'type' => MENU_NORMAL_ITEM,
       'weight' => 40,
   );
-  $items['zenlan/ac1'] = array(
+  $items['zenlan/ac1/%'] = array(
       'page callback' => 'zenlan_ac1',
       'page arguments' => array(2),
       'access arguments' => array('administer zenlan data'),
       'file' => 'zenlan.autocomplete.inc',
       'type' => MENU_CALLBACK,
   );
-  $items[ZENLAN_ADMIN_MENU_ROOT . '/ajax'] = array(
+  $items[ZENLAN_ADMIN_MENU_ROOT . '/autocomplete2'] = array(
+      'title' => t('Autocomplete2'),
+      'description' => '',
+      'page callback' => 'drupal_get_form',
+      'page arguments' => array('zenlan_autocomplete2'),
+      'access arguments' => array('administer zenlan data'),
+      'file' => 'zenlan.admin.inc',
+      'type' => MENU_NORMAL_ITEM,
+      'weight' => 41,
+  );
+  $items['zenlan/ac2'] = array(
+      'page callback' => 'zenlan_ac2',
+      'access arguments' => array('administer zenlan data'),
+      'file' => 'zenlan.autocomplete.inc',
+      'type' => MENU_CALLBACK,
+  );
+  $items[ZENLAN_ADMIN_MENU_ROOT . '/ajax1'] = array(
       'title' => t('Ajax1'),
       'description' => '',
       'page callback' => 'drupal_get_form',
@@ -107,12 +123,12 @@ function zenlan_menu() {
       'type' => MENU_NORMAL_ITEM,
       'weight' => 60,
   );
-  
+
   return $items;
 }
 
 /**
- * Implements hook_theme(). 
+ * Implements hook_theme().
  */
 function zenlan_theme($existing, $type, $theme, $path) {
   $dir = drupal_get_path('module', 'zenlan');
@@ -139,7 +155,7 @@ function zenlan_theme($existing, $type, $theme, $path) {
   );
 }
 
-function zenlan_index() {  
+function zenlan_index() {
   $result['zenlan_index'] = array(
       '#theme' => 'zenlan_index',
   );
@@ -154,7 +170,7 @@ function zenlan_page_test() {
 }
 
 /**
- * Implementation of hook_cron_queue_info() 
+ * Implementation of hook_cron_queue_info()
  */
 function zenlan_cron_queue_info() {
   $queues['zenlan'] = array('worker callback' => 'zenlan_task', 'time' => 10,);
@@ -166,7 +182,7 @@ function zenlan_task($item) {
 }
 
 /**
- * Implementation of hook_cron() 
+ * Implementation of hook_cron()
  */
 function zenlan_cron() {
   $items = array('time: ' . date('D m YYYY h:i:s'));
@@ -366,14 +382,14 @@ class Zentity1 extends Entity {
    * Initialise/build entity content
    */
   public function buildContent($view_mode = 'full', $langcode = NULL) {
-    
+
   }
 
   /**
    * Save entity
    */
   public function save() {
-    
+
   }
 
 }
