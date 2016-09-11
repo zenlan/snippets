@@ -72,7 +72,7 @@ function zenlan_menu() {
       'weight' => 30,
   );
   $items[ZENLAN_ADMIN_MENU_ROOT . '/autocomplete1'] = array(
-      'title' => t('Autocomplete1'),
+      'title' => t('Autocomplete1 (custom)'),
       'description' => '',
       'page callback' => 'drupal_get_form',
       'page arguments' => array('zenlan_autocomplete1'),
@@ -89,7 +89,7 @@ function zenlan_menu() {
       'type' => MENU_CALLBACK,
   );
   $items[ZENLAN_ADMIN_MENU_ROOT . '/autocomplete2'] = array(
-      'title' => t('Autocomplete2'),
+      'title' => t('Autocomplete2 (native)'),
       'description' => '',
       'page callback' => 'drupal_get_form',
       'page arguments' => array('zenlan_autocomplete2'),
@@ -100,6 +100,23 @@ function zenlan_menu() {
   );
   $items['zenlan/ac2'] = array(
       'page callback' => 'zenlan_ac2',
+      'access arguments' => array('administer zenlan data'),
+      'file' => 'zenlan.autocomplete.inc',
+      'type' => MENU_CALLBACK,
+  );
+  $items[ZENLAN_ADMIN_MENU_ROOT . '/autocomplete3'] = array(
+      'title' => t('Autocomplete3 (typeahead)'),
+      'description' => '',
+      'page callback' => 'drupal_get_form',
+      'page arguments' => array('zenlan_autocomplete3'),
+      'access arguments' => array('administer zenlan data'),
+      'file' => 'zenlan.admin.inc',
+      'type' => MENU_NORMAL_ITEM,
+      'weight' => 41,
+  );
+  $items['zenlan/ac3/%'] = array(
+      'page callback' => 'zenlan_ac3',
+      'page arguments' => array(2),
       'access arguments' => array('administer zenlan data'),
       'file' => 'zenlan.autocomplete.inc',
       'type' => MENU_CALLBACK,

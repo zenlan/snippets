@@ -308,13 +308,15 @@ function zenlan_autocomplete1($form, array &$form_state) {
       '#default_value' => '',
       '#attributes' => array(
           'id' => 'edit-name',
+          'placeholder' => 'Start typing... ',
+          'class' => array('form-autocomplete'),
       )
   );
   drupal_add_css('//code.jquery.com/ui/1.8.24/themes/base/jquery-ui.css', 'external');
   drupal_add_js('//code.jquery.com/ui/1.8.24/jquery-ui.js', 'external');
   $path = drupal_get_path('module', 'zenlan');
   drupal_add_js($path . '/js/jquery.base64.js');
-  drupal_add_js($path . '/js/zenlan-autocomplete.js');
+  drupal_add_js($path . '/js/zenlan-autocomplete1.js');
   drupal_add_js(array('zenlan' => array('api_url' => base_path() . 'zenlan/ac1/')), 'setting');
   return $form;
 }
@@ -328,10 +330,44 @@ function zenlan_autocomplete2($form, array &$form_state) {
       '#type' => 'textfield',
       '#default_value' => '',
       '#autocomplete_path' => 'zenlan/ac2',
-//      '#autocomplete_path' => 'user/autocomplete',
-//      '#attributes' => array(
-//          'id' => 'edit-name',
-//      )
+      '#attributes' => array(
+          'placeholder' => 'Start typing... ',
+      )
   );
   return $form;
 }
+
+function zenlan_autocomplete3($form, array &$form_state) {
+  $form['#tree'] = TRUE;
+  $form['#description'] = t('Autocomplete (multi)');
+
+  $form['name'] = array(
+      '#title' => 'Name',
+      '#type' => 'textfield',
+      '#default_value' => '',
+      '#size' => 128,
+      '#max-length' => 255,
+      '#attributes' => array(
+          'id' => 'edit-name',
+          'placeholder' => 'Start typing... ',
+          'class' => array('typeahead'),
+      )
+  );
+  $path = drupal_get_path('module', 'zenlan');
+  drupal_add_css('//code.jquery.com/ui/1.9.1/themes/base/jquery-ui.css', 'external');
+  drupal_add_css($path . '/js/jquery.typeahead.min.css');
+  drupal_add_css($path . '/js/examples.css');
+
+  drupal_add_js('//code.jquery.com/jquery-1.9.1.min.js', array('scope' => 'footer', 'type' => 'external', 'weight' => 91));
+  drupal_add_js('//code.jquery.com/ui/1.9.1/jquery-ui.min.js', array('scope' => 'footer', 'type' => 'external', 'weight' => 92));
+  drupal_add_js($path . '/js/jquery.typeahead.min.js', array('scope' => 'footer', 'type' => 'file', 'weight' => 93));
+  drupal_add_js($path . '/js/typeahead.bundle.js', array('scope' => 'footer', 'type' => 'file', 'weight' => 94));
+  drupal_add_js($path . '/js/zenlan-autocomplete3.js', array('scope' => 'footer', 'type' => 'file', 'weight' => 95));
+  drupal_add_js(array('zenlan' => array(
+          'api_url' => base_path() . 'zenlan/ac3/',
+      ),
+          ), 'setting');
+
+  return $form;
+}
+
