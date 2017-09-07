@@ -1,0 +1,59 @@
+#!/usr/bin/env php
+<?php
+/**
+ * Demonstrates handling piped command line args with xargs
+ * e.g.
+ * echo {0:{'name:myname0','type:mytype0','description:text with spaces 0'}} | xargs ./phpscript_xargs --foo=bar --json=
+ * echo {{0:{'name:myname0','type:mytype0','description:text with spaces 0'}},{1:{'name:myname1','type:mytype1','description:text with spaces 1'}}} | xargs ./phpscript_xargs --foo=bar --json=
+ * !! BREAKS ON SPACES IN DESCRIPTION !! 
+ * 
+ * https://en.wikipedia.org/wiki/Xargs
+ * echo {0..9} | xargs -n 2
+ * echo {'a','b','c','d'} | xargs -n 2
+ * echo {'foo1=bar1','foo2=bar2'} | xargs -n 1
+ */
+
+# lose element 0, the script name
+$script = array_shift($_SERVER['argv']);
+# get the rest of the args
+$args = $_SERVER['argv'];
+$key = $val = NULL;
+print_r($args);
+while ($arg = array_shift($args)) {  
+  $a = parse_arg($arg);
+  if (!empty($a)) {
+    $result[$a['key']] = $a['val'];    
+  }
+  if ($a['key'] == 'json') {
+    break;
+  }
+  else {
+    continue;
+  }
+}
+if ($a['key'] == 'json') {
+  $json = [];
+  while ($arg = array_shift($args)) {
+    parse_input($arg, $json);
+  }
+  $result[$a['key']] = $json;      
+}
+print_r($result);
+
+function parse_input($arg, &$result) {
+  if (!empty($arg)) {
+    $elem = explode(':', str_replace('{', '', str_replace('}', '', $arg)));
+    if (!empty($elem) && count($elem) == 3) {
+      $result[trim($elem[0])][trim($elem[1])] = trim($elem[2]);
+    }
+  }
+}
+
+function parse_arg($arg) {
+  $result = [];
+  if (substr($arg, 0, 2) == '--') {
+    $result['val'] = substr($arg, strpos($arg, '=') + 1);
+    $result['key'] = substr($arg, 2, strpos($arg, '=') - 2);
+  }
+  return $result;
+}

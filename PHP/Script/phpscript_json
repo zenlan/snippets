@@ -1,0 +1,54 @@
+#!/usr/bin/env php
+<?php
+/**
+ * Demeonstrates handling piped command line args
+ * e.g.
+ * echo {0:{'name:myname0','type:mytype0','description:text with spaces 0'}} | ./phpscript_json --foo=bar --json=
+ * echo {{0:{'name:myname0','type:mytype0','description:text with spaces 0'}},{1:{'name:myname1','type:mytype1','description:text with spaces 1'}}} | ./phpscript_json --foo=bar --json=
+ */
+
+# lose element 0, the script name
+$script = array_shift($_SERVER['argv']);
+# get the rest of the args
+$args = $_SERVER['argv'];
+print_r($args);
+
+$key = $val = NULL;
+print_r($args);
+while ($arg = array_shift($args)) {
+  $a = parse_arg($arg);
+  if (!empty($a)) {
+    $result[$a['key']] = $a['val'];
+    if ($a['key'] == 'json') {
+      $result[$a['key']] = parse_inputs();
+      break;
+    }
+  }
+}
+print_r($result);
+
+function parse_inputs() {
+  $value = stream_get_contents(STDIN);
+  print_r($value);
+  $inputs = [];
+  if (!empty($value)) {
+    $pairs = explode('} {', $value);
+    print_r($pairs);
+    foreach ($pairs as $pair) {
+      $elem = explode(':', str_replace('{', '', str_replace('}', '', $pair)));
+      if (!empty($elem) && count($elem) == 3) {
+        $inputs[trim($elem[0])][trim($elem[1])] = trim($elem[2]);
+      }
+    }
+  }
+  return $inputs;
+}
+
+function parse_arg($arg) {
+  $result = [];
+  if (substr($arg, 0, 2) == '--') {
+    $result['val'] = trim(substr($arg, strpos($arg, '=') + 1));
+    $result['key'] = trim(substr($arg, 2, strpos($arg, '=') - 2));
+  }
+  return $result;
+}

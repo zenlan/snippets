@@ -1,0 +1,8 @@
+#!/usr/bin/env php
+<?php
+
+print "ARGV:\n";
+print_r($_SERVER['argv']);
+print "STDIN:\n";
+print_r(stream_get_contents(STDIN));
+print "\n";
