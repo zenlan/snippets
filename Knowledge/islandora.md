@@ -24,7 +24,9 @@ $ git config --set core.autocrlf
 ## Step 2 - Vagrant
 
 Open path\to\vagrant\folders\claw_vagrant\Vagrantfile and check the port forwarding directives, e.g.
-`config.vm.network :forwarded_portt, guest: 8080, host: 8080 # Tomcat`
+
+`config.vm.network :forwarded_port, guest: 8080, host: 8080 # Tomcat`
+
 If any of the host ports are already in use on Windows, e.g. by XAMPP etc., either close them or edit the host value to that of an unused port
 
 If you use a Windows editor to edit and save the file, make sure that you don't change the EOL
