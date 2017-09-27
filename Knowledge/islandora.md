@@ -2,7 +2,7 @@
 
 Setting up [Islandora CLAW](https://github.com/Islandora-CLAW) using Vagrant with VirtualBox on Windows 10
 
-See file [\Knowledge\vagrant.md](snippets/Knowledge/vagrant.md) in this repository for a guide to setting up Vagrant on Windows 10 
+See file [\snippets\Knowledge\vagrant.md](vagrant.md) in this repository for a guide to setting up Vagrant on Windows 10 
 
 ## Step 1 - Git
 
