@@ -1,6 +1,4 @@
-# ISLANDORA CLAW
-
-Setting up [Islandora CLAW](https://github.com/Islandora-CLAW) using Vagrant with VirtualBox on Windows 10
+# [Islandora CLAW](https://github.com/Islandora-CLAW) using Vagrant with VirtualBox on Windows 10
 
 See file [\snippets\Knowledge\vagrant.md](vagrant.md) in this repository for a guide to setting up Vagrant on Windows 10 
 
@@ -11,7 +9,7 @@ Open Git Bash
 $ cd path\to\vagrant\folders
 $ git clone --single-branch https://github.com/Islandora-CLAW/claw_vagrant
 ```
-[Claw Vagrant on Github](https://github.com/Islandora-CLAW/claw_vagrant)
+[Claw Vagrant repo on Github](https://github.com/Islandora-CLAW/claw_vagrant)
 
 [Windows Troubleshooting](https://github.com/Islandora-CLAW/claw_vagrant#windows-troubleshooting)
 ```
