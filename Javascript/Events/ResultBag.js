@@ -11,6 +11,10 @@ ResultBag.prototype.get = function () {
   return this.results;
 };
 
+ResultBag.prototype.empty = function () {
+  this.results = []; 
+};
+
 ResultBag.prototype.toString = function (glue) {
   return this.results.join(glue);
 };

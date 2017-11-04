@@ -20,6 +20,10 @@ CollectionParent.prototype.getItems = function () {
   return this.items;
 };
 
+CollectionParent.prototype.putItem = function (item) {
+  this.items.push(item);
+};
+
 CollectionParent.prototype.getItemById = function (id) {
   var result;
   this.items.forEach(function(item) {
@@ -39,9 +43,9 @@ CollectionParent.prototype.addItem = function (id, params) {
     item.listener.on('collection:bar', function (e) {
       var result = item.get('label') + ' received collection:bar event from ' + e.get('label');
       console.log(result);
-      ccResultBag.add(result);
+      ccResultBag.add('collection:bar__' + item.get('label'));
     });
-    this.items.push(item);    
+    this.putItem(item);    
   } else {
     console.log('FOUND ' + id);
   }
