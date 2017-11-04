@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Objects</title>
+    <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+    <meta name="viewport" content="width=device-width">
+  </head>
+  <body>
+    <form>
+      <p>
+        <button id="create">Object Create</button>
+        <button id="mixin">Object Mixin</button>
+        <button id="collection">Object Collection: Add Item</button>
+      </p>
+    </form>
+    <ul id="result">
+    </ul>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript" src="object-create.js"></script>
+    <script type="text/javascript" src="object-mixin.js"></script>
+    <!--<script type="text/javascript" src="object-props.js"></script>-->
+    <script type="text/javascript" src="object-collection.js"></script>
+    <script>
+      (function ($) {
+        $('#create').click(doObjectCreate);
+        $('#mixin').click(doObjectMixin);
+        $('#collection').click(getItem);
+      })(jQuery);
+    </script>
+  </body>
+</html>
