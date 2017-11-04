@@ -22,7 +22,7 @@ CollectionParent.prototype.getItems = function () {
 
 CollectionParent.prototype.getItemById = function (id) {
   var result;
-  $.each(this.items, function(i, item) {
+  this.items.forEach(function(item) {
     if (item.getId() === id) {
       result = item;      
     }
@@ -35,12 +35,13 @@ CollectionParent.prototype.addItem = function (id, params) {
   var item = this.getItemById(id);
   if (item === undefined) {
     console.log('NEW ' + id);
-    item = new Item();
-    item.init(params);
-    this.items.push(item);
+    item = new Item().init(params);
     item.listener.on('collection:bar', function (e) {
-      console.log(item.get('label') + ' received collection:bar event from ' + e.get('label'));
+      var result = item.get('label') + ' received collection:bar event from ' + e.get('label');
+      console.log(result);
+      ccResultBag.add(result);
     });
+    this.items.push(item);    
   } else {
     console.log('FOUND ' + id);
   }
@@ -55,6 +56,6 @@ Collection.prototype.constructor = Collection;
 
 ccCollection = new Collection().init({label: 'Collection'});
 ccCollection.listener.on('item:foo', function (e) {
-  console.log('Collection received item:foo event from ' + e);
-  ccCollection.listener.fire('collection:bar', e); 
+  console.log('Collection received item:foo event from ' + e.get('label'));
+  ccCollection.listener.fire('collection:bar', ccCollection); 
 });

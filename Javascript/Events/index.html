@@ -12,10 +12,11 @@
         <button id="ping">Ping Items</button>
       </p>
     </form>
-    <ul id="result">
-    </ul>
+    <div id="result">
+    </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script type="text/javascript" src="EventListener.js"></script>
+    <script type="text/javascript" src="ResultBag.js"></script>
     <script type="text/javascript" src="Collection.js"></script>
     <script type="text/javascript" src="Item.js"></script>
     <script type="text/javascript" src="Main.js"></script>
@@ -23,7 +24,12 @@
       (function ($) {
         $('#collection').click(getItem);
         $('#ping').click(pingItem);
+
       })(jQuery);
+
+      function showPingResult(content) {
+        $('#result').html(content);
+      }
     </script>
   </body>
 </html>

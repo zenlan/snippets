@@ -4,12 +4,15 @@ function getItem(e) {
   var params = {
     id: idx,
     label: 'item #' + idx,
-    foo: 'bar ' + idx,
+    foo: 'bar ' + idx
   };
-  ccCollection.addItem(idx, params);  
+  ccCollection.addItem(idx, params);
 }
 
 function pingItem(e) {
   e.preventDefault();
-  ccCollection.listener.fire('item:foo', ccCollection);
+  ccListener.fire('item:foo', ccListener);
+  setTimeout(function () {
+    showPingResult(ccResultBag.toString('<br />'));
+  }, 1000);
 }
