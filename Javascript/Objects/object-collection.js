@@ -1,14 +1,10 @@
-/**
- * Example of a static function.
- * 
- * var staticFunction = (function () {
- *  var id = 100;
- *  return function () {
- *    return id++;
- *  };
- * })();
- * @type Function
- */
+var uniqueID = (function () {
+  var id = 100;
+  return function () {
+    return id++;
+  };
+})();
+
 var getItemObj = (function (idx, params) {
   console.log(idx);
   var items = [];

@@ -10,6 +10,7 @@
       <p>
         <button id="create">Object Create</button>
         <button id="mixin">Object Mixin</button>
+        <button id="overload">Object Overload</button>
         <button id="collection">Object Collection: Add Item</button>
       </p>
     </form>
@@ -18,13 +19,14 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script type="text/javascript" src="object-create.js"></script>
     <script type="text/javascript" src="object-mixin.js"></script>
-    <!--<script type="text/javascript" src="object-props.js"></script>-->
+    <script type="text/javascript" src="object-overload.js"></script>
     <script type="text/javascript" src="object-collection.js"></script>
     <script>
       (function ($) {
         $('#create').click(doObjectCreate);
         $('#mixin').click(doObjectMixin);
         $('#collection').click(getItem);
+        $('#overload').click(doOverload);
       })(jQuery);
     </script>
   </body>
