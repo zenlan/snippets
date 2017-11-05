@@ -41,9 +41,12 @@ CollectionParent.prototype.addItem = function (id, params) {
     console.log('NEW ' + id);
     item = new Item().init(params);
     item.listener.on('collection:bar', function (e) {
-      var result = item.get('label') + ' received collection:bar event from ' + e.get('label');
-      console.log(result);
+      console.log(item.get('label') + ' received collection:bar event from ' + e.get('label'));
       ccResultBag.add('collection:bar__' + item.get('label'));
+    });
+    item.listener.on('collectResults', function (e) {
+      console.log(item.get('label') + ' received collectResults event from ' + e.get('label'));
+      item.collectResults(3);
     });
     this.putItem(item);    
   } else {

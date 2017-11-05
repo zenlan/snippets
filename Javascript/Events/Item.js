@@ -13,7 +13,7 @@ ItemParent.prototype.init = function (settings) {
 ItemParent.prototype.get = function (prop) {
   if (this.settings === undefined) {
     this.settings = {};
-  }  
+  }
   return this.settings[prop];
 };
 
@@ -31,6 +31,23 @@ ItemParent.prototype.getLabel = function () {
 
 ItemParent.prototype.setLabel = function (value) {
   this.settings['label'] = value;
+};
+
+ItemParent.prototype.collectResults = function (max) {
+  var i = 0;
+  var max = 3;
+  var item = this;
+  (function loop() {
+    var rand = Math.round(Math.random() * (3000 - 500)) + 500;    
+    if (i === max) {
+      return;
+    }
+    i++;
+    setTimeout(function () {
+      ccResultBag.add(item.get('label') + ' result ' + i + '/' + max + ' : ' + new Date().toString());
+      loop();
+    }, rand);
+  }());
 };
 
 function Item() {

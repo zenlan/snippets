@@ -9,7 +9,9 @@
     <form>
       <p>
         <button id="collection">Add Item</button>
+        <button id="batch">Add Batch</button>
         <button id="ping">Ping Items</button>
+        <button id="work">Do Work</button>
       </p>
     </form>
     <div id="result">
@@ -24,10 +26,15 @@
       (function ($) {
         $('#collection').click(getItem);
         $('#ping').click(pingItem);
+        $('#batch').click(addBatch);
+        $('#work').click(doWork);
 
       })(jQuery);
 
-      function showPingResult(content) {
+      function showWaiting() {
+        $('#result').html('Waiting for results...');
+      }
+      function showResult(content) {
         $('#result').html(content);
       }
     </script>
