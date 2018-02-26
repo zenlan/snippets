@@ -30,3 +30,6 @@ rm ./install_solr_service.sh
 rm ./solr-$SOLR_VERSION.tgz
 
 echo "NOW SET -Xmx & -Xms IN /etc/default/solr6.in.sh"
+
+echo "open port on ubuntu: 'ufw allow 8660 && ufw status verbose' "
+
