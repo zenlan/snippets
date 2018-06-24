@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>JS Style Guide</title>
+    <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <style>
+		body {
+			font-family:sans-serif;
+		}
+		div {
+			width: 22.5%;
+			padding: 1%;
+		}
+		.left {
+			float: left;
+		}	  
+		.old {
+			border: 2px solid lightgrey;
+		}	  
+		.new {
+			border: 2px solid lightgreen;
+		}
+    </style>
+  </head>
+  <body>
+    <h1>Testing JavaScript Style Guide from <a href="https://medium.freecodecamp.org/google-publishes-a-javascript-style-guide-here-are-some-key-lessons-1810b8ad050b" target="_blank">Google</a></h1>
+    <div class="left old">
+      <h3>Unsorted (OLD)</h3>
+      <ol id="origOld"></ol>
+    </div>
+    <div class="left old">
+      <h3>Sorted (OLD)</h3>
+      <ol id="sortOld"></ol>
+    </div>
+	<div class="left new">
+      <h3>Unsorted (NEW)</h3>
+      <ol id="origNew"></ol>
+    </div>
+    <div class="left new">
+      <h3>Sorted (NEW)</h3>
+      <ol id="sortNew"></ol>
+    </div>
+	<script
+	  src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+	  integrity="sha256-3edrmyuQ0w65f8gfBsqowzjJe2iM6n0nKciPUp8y+7E="
+	  crossorigin="anonymous"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function (event) {
+		// Old style javascript
+		testOld();
+		// New style javascript
+		testNew();		  
+	  });	  
+      function testOld() {
+		// bad: more than 1 variable declaration per line
+		// bad: use const/let instead of var
+		var ol1 = document.getElementById('origOld'), ol2 = document.getElementById('sortOld');
+		var sort = orig = [
+			'bœuf', 'beef',
+			'café', 'CAFÉ', 'cafe', 'Café', 'Cafe', 'Café au lait', 'Café-au-lait',
+			'cañon', 'canon',
+			'dû', 'du',
+			'L\'Haÿ-les-Roses', 'L\'Haÿ les Roses', 'L Hay les Roses'
+		];
+		// bad: use of 'function' instead of arrow
+		// bad: use of forEach instead of for...of
+		orig.forEach(function (element, index, array) {
+		// bad: use of string concat instead of backtick string
+			ol1.innerHTML += '<li>' + element + '</li>';
+		});
+		sort.sort(function (a, b) {
+			return a.toLowerCase().localeCompare(b.toLowerCase());
+		});
+		sort.forEach(function (element, index, array) {
+			ol2.innerHTML += '<li>' + element + '</li>';
+		});
+      }
+      function testNew() {
+		const OL1 = document.getElementById('origNew');
+		const OL2 = document.getElementById('sortNew');
+		let orig = [
+			'bœuf', 'beef',
+			'café', 'CAFÉ', 'cafe', 'Café', 'Cafe', 'Café au lait', 'Café-au-lait',
+			'cañon', 'canon',
+			'dû', 'du',
+			'L\'Haÿ-les-Roses', 'L\'Haÿ les Roses', 'L Hay les Roses'
+		];
+		let sort = orig;
+		// http://exploringjs.com/es6/ch_for-of.html
+		for (const [KEY, VALUE] of orig.entries()) {
+			console.log(`${KEY} => ${VALUE}`);
+			// testing use of ${} with jQuery object						
+			console.log($(OL1));			
+			OL1.innerHTML += `<li>${VALUE}</li>`;
+		}
+		sort.sort((a, b) => {
+			return a.toLowerCase().localeCompare(b.toLowerCase());
+		});		
+		for (const VALUE of sort.entries()) {
+			OL2.innerHTML += `<li>${VALUE}</li>`;
+		}
+      }
+    </script>
+  </body>
+</html>

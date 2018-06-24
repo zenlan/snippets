@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Events</title>
+    <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+    <meta name="viewport" content="width=device-width">
+  </head>
+  <body>
+    <form>
+      <p>
+        <button id="collection">Add Item</button>
+        <button id="batch">Add Batch</button>
+        <button id="ping">Ping Items</button>
+        <button id="work">Do Work</button>
+      </p>
+    </form>
+    <div id="result">
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript" src="EventListener.js"></script>
+    <script type="text/javascript" src="ResultBag.js"></script>
+    <script type="text/javascript" src="Collection.js"></script>
+    <script type="text/javascript" src="Item.js"></script>
+    <script type="text/javascript" src="Main.js"></script>
+    <script>
+      (function ($) {
+        $('#collection').click(getItem);
+        $('#ping').click(pingItem);
+        $('#batch').click(addBatch);
+        $('#work').click(doWork);
+
+      })(jQuery);
+
+      function showWaiting() {
+        $('#result').html('Waiting for results...');
+      }
+      function showResult(content) {
+        $('#result').html(content);
+      }
+    </script>
+  </body>
+</html>
