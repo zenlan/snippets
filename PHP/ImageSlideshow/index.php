@@ -116,7 +116,7 @@ if (isset($_POST['resize']) || isset($_POST['slideshow'])) {
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Image Resize</title>
+    <title>Slideshow</title>
     <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
     <meta name="viewport" content="width=device-width">
     <style>
