@@ -21,7 +21,6 @@ function getSubDirs($dir_in) {
   if ($files = scandir($dir_in)) {
     foreach ($files as $file) {
       $path = $dir_in . '\\' . $file;
-      $tmp = is_dir($path);
       if (substr($file, 0, 1) !== '.') {
         if (is_dir($path)) {
           $result[] = pathinfo($path);
@@ -37,7 +36,6 @@ function getFiles($dir_in, $format = 'JPG') {
   if ($files = scandir($dir_in)) {
     foreach ($files as $file) {
       $path = $dir_in . '\\' . $file;
-      $tmp = is_dir($path);
       if (substr($file, 0, 1) !== '.') {
         if (is_file($path)) {
           $info = pathinfo($path);
