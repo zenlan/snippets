@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" class="has-background-white-bis has-text-black-bis">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <title>Traffic Lights</title>
+    <style>
+      body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .container {
+        min-height: 10em;
+        display: table-cell;
+        vertical-align: middle;
+      }
+      .traffic-light {
+        height: 200px;
+        width: 200px;
+        border: solid 15px grey;
+        border-radius: 50%;
+      }
+      .has-background-off {background: grey;}
+      .has-background-green {background: green;}
+      .has-background-amber {background: gold;}
+      .has-background-red {background: red;}
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="column is-4">
+        <p class="traffic-light red has-background-red"></p>
+      </div>
+      <div class="column is-4">
+        <p class="traffic-light amber has-background-off"></p>
+      </div>
+      <div class="column is-4">
+        <p class="traffic-light green has-background-off"></p>
+      </div>
+    </div>
+    <script>
+      document.addEventListener(`DOMContentLoaded`, async () => {
+
+        let curState = 0;
+        let states = [
+          {red: 1, amber: 0, green: 0},
+          {red: 1, amber: 1, green: 0},
+          {red: 0, amber: 0, green: 1},
+          {red: 0, amber: 1, green: 0},
+        ];
+
+        setInterval(function () {
+          changeState();
+        }, 3000);
+
+        function changeState() {
+          curState++;
+          if (curState > (states.length - 1)) {
+            curState = 0;
+          }
+          let newState = states[curState];
+          [...document.querySelectorAll('.traffic-light')].forEach((elem, i) => {
+            elem.classList.replace('has-background-green', 'has-background-off');
+            elem.classList.replace('has-background-amber', 'has-background-off');
+            elem.classList.replace('has-background-red', 'has-background-off');
+          });
+          Object.keys(newState).forEach((k, v) => {
+            let elem = document.querySelector('.' + k);
+            if (newState[k] == 1) {
+              elem.classList.replace('has-background-off', 'has-background-' + k);
+            }
+          });
+        }
+
+      })
+    </script>
+  </body>
+</html>
