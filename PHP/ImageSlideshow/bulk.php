@@ -197,7 +197,7 @@ if (isset($_POST['resize']) || isset($_POST['html'])) {
       body {font-family:sans-serif;}
       div {padding:10px;}
       table, td {padding:5px;border:1px solid grey;text-align:center;}
-      th {padding:5px;border:1px solid grey;background-color:#666;color:#fff};
+      th {padding:5px;border:1px solid grey;background-color:#666;color:#fff;}
     </style>
   </head>
   <body>
