@@ -1,114 +1,23 @@
 <?php
+include 'include.php';
 
-function getDirOut($name) {
-  $dir_out = 'resized';
-  if (!file_exists($dir_out)) {
-    mkdir($dir_out);
-  }
-  $dir_out .= '/' . $name;
-  if (!file_exists($dir_out)) {
-    mkdir($dir_out);
-  }
-  if (file_exists($dir_out)) {
-    return $dir_out . '/';
-  } else {
-    return FALSE;
-  }
-}
-
-function doResize($files, $dir_in, $dir_out, $size) {
-  $result = [];
-  foreach ($files as $file) {
-    if ($file[0] !== '.') {
-      if ($img = @imagecreatefromjpeg($dir_in . '/' . $file)) {
-        $name = hash('md5', $file);
-        list($width, $height) = getimagesize($dir_in . '/' . $file);
-        $aspect = ($width > $height ? 'landscape' : 'portrait');
-        $ratio = $width / $height;
-        $new_width = ($aspect == 'landscape' ? $size : round($size * ($width / $height), 0, PHP_ROUND_HALF_UP));
-        $new_height = ($aspect == 'portrait' ? $size : round($size * ($height / $width), 0, PHP_ROUND_HALF_UP));
-        if ($new_width && $new_height) {
-          $img_scaled = imagescale($img, $new_width, $new_height);
-//        $scale = 0.1;
-//        $new_width = round($width * $scale, 0, PHP_ROUND_HALF_UP);
-//        if ($new_width) {
-//          $img_scaled = imagescale($img, $new_width);
-          if (imagejpeg($img_scaled, $dir_out . $name)) {
-            $result[$file] = $dir_out . $name;
-          }
+$resize = isset($_POST['resize']);
+$slides = ($resize || isset($_POST['slideshow']));
+if ($resize || $slides) {
+  $dir_in = $_POST['directory'];
+  $size = $_POST['size'];
+  $gaq = $_POST['gaq'];
+  if (validInput($dir_in, $size)) {
+    try {
+      if ($result = execute($dir_in, $resize, $size, $slides, $gaq)) {
+        if ($slides) {
+          $result = '<a href="' . $result . '" target="_blank">' . $result . '</a>';
+        } else if ($resize) {
+          $result = print_r($result);
         }
-        imagedestroy($img);
       }
-    }
-  }
-  return $result;
-}
-
-function doSlidesHTML($dir_name, $dir_out, $gaq) {
-  $outfile = $dir_out . 'index.html';
-  @unlink($outfile);
-  if (file_exists($outfile)) {
-    return FALSE;
-  }
-  if (!$files = scandir($dir_out)) {
-    return FALSE;
-  } else {
-    $tpl_html = file_get_contents('lightbox.html');
-    $tpl_indic = '               <li data-target="#lightbox" data-slide-to="{n}" class="{active}"></li>';
-    $tpl_items = '               <div class="carousel-item {active}">
-                  <img class="d-block w-100" src="{name}" title="{n}" alt="{n}"/>
-                  <div class="carousel-caption d-none d-md-block"><p>{n}</p></div>
-                </div>';
-    $indicators = '';
-    $items = '';
-    $n = 0;
-    foreach ($files as $file) {
-      if ($file[0] !== '.') {
-        $active = ($n > 0 ? '' : 'active');
-        $indicators .= str_replace('{n}', $n, str_replace('{active}', $active, $tpl_indic)) . "\n";
-        $n++;
-        $items .= str_replace('{n}', $n, str_replace('{name}', $file, str_replace('{active}', $active, $tpl_items))) . "\n";
-      }
-    }
-    $html = str_replace('{title}', $dir_name, $tpl_html);
-    $html = str_replace('{gaq}', $gaq, $html);
-    $html = str_replace('{indicators}', $indicators, $html);
-    $html = str_replace('{items}', $items, $html);
-    file_put_contents($outfile, $html);
-    if (!file_exists($outfile)) {
-      return FALSE;
-    }
-    return $outfile;
-  }
-}
-
-if (isset($_POST['resize']) || isset($_POST['slideshow'])) {
-  if (!is_dir($_POST['directory'])) {
-    $error = 'invalid directory';
-  } else {
-    $dir_in = $_POST['directory'];
-    $dir_name = basename($dir_in);
-    $dir_out = getDirOut($dir_name);
-  }
-  if (!$dir_out) {
-    $error = 'Failed to create output directory';
-  } else {
-    if (isset($_POST['resize'])) {
-      if (!is_numeric($_POST['size'])) {
-        $error = 'invalid size';
-      } else if (!$files = scandir($dir_in)) {
-        $error = 'No files found';
-      } else {
-        $size = $_POST['size'];
-        $images = doResize($files, $dir_in, $dir_out, $size);
-      }
-    } else if (isset($_POST['slideshow'])) {
-      $gaq = $_POST['gaq'];
-      if (!$result = doSlidesHTML($dir_name, $dir_out, $gaq)) {
-        $error = 'Failed to create html file';
-      } else {
-        $result = '<a href="' . $result . '" target="_blank">' . $result . '</a>';
-      }
+    } catch (Exception $exc) {
+      echo $exc->getMessage();
     }
   }
 }
