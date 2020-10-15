@@ -10,7 +10,7 @@ if ($resize || $slides) {
   if (validInput($dir_in, $size)) {
     try {
       $subdirs = getSubDirs($dir_in);
-      $result = [];
+      $result = '';
       if (!empty($subdirs)) {
         foreach ($subdirs as $pathinfo) {
           $dir_name = $pathinfo['basename'];
@@ -27,7 +27,7 @@ if ($resize || $slides) {
         if (!$link = doListingHTML($outdirs, 'resized', $gaq)) {
           throw 'Failed to create html listing file';
         } else {
-          $result[] = '<a href="' . $link . '" target="_blank">' . $link . '</a>';
+          $result = '<a href="' . $link . '" target="_blank">' . $link . '</a>';
         }
       }
     } catch (Exception $exc) {
