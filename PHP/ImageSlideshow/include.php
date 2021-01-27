@@ -12,7 +12,8 @@ function execute($dir_in, $resize, $size, $slides, $gaq) {
       $result = doResize($files, $dir_out, $size);
     }
     if ($slides) {
-      if (!$result = doSlidesHTML($dir_name, $dir_out, $gaq)) {
+//      if (!$result = doSlidesHTML($dir_name, $dir_out, $gaq)) {
+      if (!$result = doGalleryHTML($dir_name, $dir_out, $gaq)) {
         throw 'Failed to create html file for ' . $dir_name;
       }
     }
@@ -29,7 +30,7 @@ function validInput($dir_in, $size) {
   return TRUE;
 }
 
-function doListingHTML($subdirs, $dir_out, $gaq) {
+function doListingHTML($subdirs, $dir_out, $title, $gaq, $image = '') {
   $outfile = $dir_out . '/index.html';
   @unlink($outfile);
   if (file_exists($outfile)) {
@@ -48,14 +49,36 @@ function doListingHTML($subdirs, $dir_out, $gaq) {
       $n++;
       $items .= str_replace('{href}', $dir_name, str_replace('{title}', $dir_name, $tpl_items)) . "\n";
     }
+//    $assets = '../assets/';
     $html = str_replace('{gaq}', $gaq, file_get_contents('listing.html'));
+    $html = str_replace('{title}', $title, $html);
     $html = str_replace('{items}', $items, $html);
+//    $html = str_replace('{assets}', $assets, $html);s
+    $image = doCoverImage($image, $dir_out . '../', 600);
+    $html = str_replace('{image}', '<img src="' . $image . '">', $html);
     file_put_contents($outfile, $html);
     if (!file_exists($outfile)) {
       return FALSE;
     }
     return $outfile;
   }
+}
+
+function doCoverImage($path, $dir_out, $size) {
+  if (file_exists($path)) {
+    $files[] = pathinfo($path);
+    $tmp = doResize($files, $dir_out, $size);
+    if (is_array($tmp)) {
+      $name = basename(array_pop($tmp));
+      $newpath = $dir_out . 'cover.jpg';
+      @unlink($newpath);
+      @rename($dir_out . $name, $newpath);
+      if (file_exists($newpath)) {
+        return 'cover.jpg';
+      }
+    }
+  }
+  return FALSE;
 }
 
 function doSlidesHTML($dir_name, $dir_out, $gaq) {
@@ -83,11 +106,41 @@ function doSlidesHTML($dir_name, $dir_out, $gaq) {
         $indicators .= str_replace('{n}', $n, str_replace('{active}', $active, $tpl_indic)) . "\n";
         $n++;
         $items .= str_replace('{n}', $n, str_replace('{name}', $file, str_replace('{active}', $active, $tpl_items))) . "\n";
+        $items .= str_replace('{name}', $file, $tpl_items) . "\n";
       }
     }
     $html = str_replace('{title}', $dir_name, $tpl_html);
     $html = str_replace('{gaq}', $gaq, $html);
     $html = str_replace('{indicators}', $indicators, $html);
+    $html = str_replace('{items}', $items, $html);
+    file_put_contents($outfile, $html);
+    if (!file_exists($outfile)) {
+      return FALSE;
+    }
+    return $outfile;
+  }
+}
+
+function doGalleryHTML($dir_name, $dir_out, $gaq) {
+  $outfile = $dir_out . 'index.html';
+  @unlink($outfile);
+  if (file_exists($outfile)) {
+    return FALSE;
+  }
+  if (!$files = scandir($dir_out)) {
+    return FALSE;
+  } else {
+    $tpl_html = file_get_contents('gallery.html');
+    $tpl_items = '<li><img src="{name}" title="{name}" alt="{name}"/></li>';
+    $items = '';
+    asort($files, SORT_NUMERIC);
+    foreach ($files as $file) {
+      if ($file[0] !== '.') {
+        $items .= str_replace('{name}', $file, $tpl_items) . "\n";
+      }
+    }
+    $html = str_replace('{title}', $dir_name, $tpl_html);
+    $html = str_replace('{gaq}', $gaq, $html);
     $html = str_replace('{items}', $items, $html);
     file_put_contents($outfile, $html);
     if (!file_exists($outfile)) {
@@ -116,19 +169,16 @@ function doResize($files, $dir_out, $size, $hash = FALSE, $format = NULL) {
       list($width, $height) = getimagesize($path);
       $aspect = ($width > $height ? 'landscape' : 'portrait');
       $ratio = $width / $height;
-      $new_width = ($aspect == 'landscape' ? $size : round($size * ($width / $height), 0, PHP_ROUND_HALF_UP));
-      $new_height = ($aspect == 'portrait' ? $size : round($size * ($height / $width), 0, PHP_ROUND_HALF_UP));
-      if ($new_width && $new_height) {
-        $img_scaled = imagescale($img, $new_width, $new_height);
-//        $scale = 0.1;
-//        $new_width = round($width * $scale, 0, PHP_ROUND_HALF_UP);
-//        if ($new_width) {
-//          $img_scaled = imagescale($img, $new_width);
-        if (imageOut($img_scaled, $dir_out . $name, ($format ? $format : $fileinfo['extension']))) {
-//        if (imagepng($img_scaled, $dir_out . $name)) {
-//          if (imagejpeg($img_scaled, $dir_out . $name)) {
-          $result[$path] = $dir_out . $name;
-        }
+      if ($aspect == 'portrait') {
+        $new_height = $size;
+        $new_width = round($size * ($width / $height), 0);
+      } else if ($aspect == 'landscape') {
+        $new_width = $size;
+        $new_height = round($size * ($height / $width), 0);
+      }
+      $img_scaled = imagescale($img, $new_width, $new_height);
+      if (imageOut($img_scaled, $dir_out . $name, ($format ? $format : $fileinfo['extension']))) {
+        $result[$path] = $dir_out . $name;
       }
       imagedestroy($img);
     }
@@ -138,7 +188,7 @@ function doResize($files, $dir_out, $size, $hash = FALSE, $format = NULL) {
 
 function imageIn($path, $format) {
   $gd = FALSE;
-  switch ($format) {
+  switch (strtolower($format)) {
     case 'bmp': $gd = imagecreatefrombmp($path);
       break;
     case 'gif': $gd = imagecreatefromgif($path);
@@ -154,7 +204,7 @@ function imageIn($path, $format) {
 
 function imageOut($gd, $path, $format) {
   $ok = FALSE;
-  switch ($format) {
+  switch (strtolower($format)) {
     case 'bmp': $ok = imagewbmp($gd, $path);
       break;
     case 'gif': $ok = imagegif($gd, $path);

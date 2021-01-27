@@ -4,20 +4,21 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{title}</title>
-    <link href="bootstrap.min.css" rel="stylesheet" type="text/css"/>
+    <link href="../bootstrap.min.css" rel="stylesheet" type="text/css"/>
     <style>
-      .container {
-        text-align: center;
+      ul {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
       }
-      img {
-        width: 600px;
+      li {
+        min-width: 220px;
       }
     </style>
     <script type="text/javascript">
       var _gaq = _gaq || [];
       _gaq.push(['_setAccount', '{gaq}']);
       _gaq.push(['_trackPageview']);
-
       (function () {
         var ga = document.createElement('script');
         ga.type = 'text/javascript';
@@ -29,14 +30,12 @@
     </script>
   </head>
   <body>
-    <div class="jumbotron jumbotron-fluid">
-      <div class="container">
+    <div class="container text-center">
+      <h1 class="display-5">{title}</h1>
+      <p>All rights reserved</p>
+      <ul>
         {items}
-      </div>
-      <div class="container">
-        {image}
-      </div>
+      </ul>
     </div>
-
   </body>
 </html>

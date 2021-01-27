@@ -7,6 +7,8 @@ if ($resize || $slides) {
   $dir_in = $_POST['directory'];
   $size = $_POST['size'];
   $gaq = $_POST['gaq'];
+  $title = $_POST['title'];
+  $image = $_POST['image'];
   if (validInput($dir_in, $size)) {
     try {
       $subdirs = getSubDirs($dir_in);
@@ -24,11 +26,14 @@ if ($resize || $slides) {
           }
         }
         $outdirs = getSubDirs('resized');
-        if (!$link = doListingHTML($outdirs, 'resized', $gaq)) {
+        if (!$link = doListingHTML($outdirs, 'resized', $title, $gaq, $image)) {
           throw 'Failed to create html listing file';
         } else {
           $result = '<a href="' . $link . '" target="_blank">' . $link . '</a>';
         }
+        copy('./assets/bootstrap.min.css', './resized/bootstrap.min.css');
+//        copy('./assets/jquery-3.5.1.slim.min.js', './resized/jquery-3.5.1.slim.min.js');
+//        copy('./assets/bootstrap.bundle.min.js', './resized/bootstrap.bundle.min.js');
       }
     } catch (Exception $exc) {
       echo $exc->getMessage();
@@ -53,10 +58,17 @@ if ($resize || $slides) {
     <div style="float:left;">
       <form action="" method="POST">
         <p><label for="directory">Source directory</label>
-          &nbsp;<input type="text" id="directory" name="directory" value="<?php echo (isset($_POST['directory']) ? $_POST['directory'] : ''); ?>" size="64"/>
+          &nbsp;<input type="text" id="directory" name="directory" value="<?php echo (isset($_POST['directory']) ? $_POST['directory'] : ''); ?>" size="128"/>
         </p>
         <p><label for="size">Target size of longest side in pixels</label>
-          &nbsp;<input type="text" id="size" name="size" value="<?php echo (isset($_POST['size']) ? $_POST['size'] : 440); ?>" size="6"/>
+          &nbsp;<input type="text" id="size" name="size" value="<?php echo (isset($_POST['size']) ? $_POST['size'] : 600); ?>" size="6"/>
+        </p>
+        <p><label for="gaq">Page title</label>
+          &nbsp;<input type="text" id="title" name="title" value="<?php echo (isset($_POST['title']) ? $_POST['title'] : ''); ?>" size="64"/>
+        </p>
+
+        <p><label for="gaq">Cover image</label>
+          &nbsp;<input type="text" id="image" name="image" value="<?php echo (isset($_POST['image']) ? $_POST['image'] : ''); ?>" size="128"/>
         </p>
         <p><label for="gaq">Google Analytics</label>
           &nbsp;<input type="text" id="gaq" name="gaq" value="<?php echo (isset($_POST['gaq']) ? $_POST['gaq'] : ''); ?>" size="10"/>
@@ -75,7 +87,15 @@ if ($resize || $slides) {
         <table>
           <caption>Created</caption>
           <?php
-          foreach ($result as $link) {
+          if (is_array($result)) {
+            foreach ($result as $link) {
+              ?>
+              <tr>
+                <td><?php echo $link; ?></td>
+              </tr>
+              <?php
+            }
+          } else {
             ?>
             <tr>
               <td><?php echo $link; ?></td>
