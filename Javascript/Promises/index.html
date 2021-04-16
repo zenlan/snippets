@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" class="has-navbar-fixed-top has-background-white-bis has-text-black-bis">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <title>Promises</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
+    <style>
+      body {padding-top: 1%;}
+      .is-horizontal-center {justify-content: center;}
+      .hide {display: none;}
+      .underline {text-decoration: underline;}
+    </style>
+  </head>
+  <body>
+    <div class="container content">
+      <h1>Promises</h1>
+      <p>Open javascript console to see results then click one of these </p>
+      <p>
+        <button id="btn-parallel" class="button">Parallel</button>
+        <button id="btn-settled" class="button">Parallel Settled</button>
+        <button id="btn-sequential" class="button">Sequential</button>
+      </p>
+    </div>
+    <script src="test.js"></script>
+    <script>      
+      document.addEventListener(`DOMContentLoaded`, async () => {
+
+        document.getElementById(`btn-parallel`).addEventListener(`click`, function (e) {          
+          e.preventDefault();
+          doTasksParallel();
+        }, false);
+
+        document.getElementById(`btn-settled`).addEventListener(`click`, function (e) {          
+          e.preventDefault();
+          doTasksSettled();
+        }, false);
+
+        document.getElementById(`btn-sequential`).addEventListener(`click`, function (e) {          
+          e.preventDefault();
+          doTasksSequential();
+        }, false);
+
+      }, false);
+      
+    </script>
+  </body>
+</html>
